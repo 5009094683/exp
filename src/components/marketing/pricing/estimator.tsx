@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useId, useState } from "react";
 import { EarlyAccessButton } from "@/components/leads/early-access-button";
+import { AnimatedNumber } from "@/components/ui/animated-number";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { estimate, plans, usageRates } from "@/content/pricing";
@@ -14,6 +15,8 @@ const currencyFormat = new Intl.NumberFormat("en-US", {
   currency: "USD",
   maximumFractionDigits: 0,
 });
+
+const formatCurrency = (value: number) => currencyFormat.format(value);
 
 const largestSelfServe = Math.max(...plans.map((plan) => plan.maxAgents ?? 0));
 
@@ -140,7 +143,7 @@ export function PricingEstimator() {
               <Badge tone="accent">{result.plan.name} plan</Badge>
             </div>
             <p className="mt-3 text-5xl font-semibold tracking-tight text-fg tabular-nums">
-              {currencyFormat.format(result.total)}
+              <AnimatedNumber value={result.total} format={formatCurrency} />
             </p>
 
             <dl className="mt-6 divide-y divide-line border-y border-line">

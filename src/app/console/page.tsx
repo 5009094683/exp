@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { PageHero } from "@/components/marketing/page-hero";
+import { OverviewView } from "@/components/console/views/overview";
 
-export const metadata: Metadata = { title: "Console" };
+export const metadata: Metadata = { title: "Overview" };
 
-export default function ConsolePage() {
-  return <PageHero eyebrow="Demo workspace" title="Console" />;
+export default function ConsoleOverviewPage() {
+  return <OverviewView />;
 }

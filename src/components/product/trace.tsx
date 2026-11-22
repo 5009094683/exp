@@ -13,11 +13,14 @@ export function layoutWaterfall(steps: RunStep[]): Array<{ left: number; width: 
     step.status === "pending" ? 0 : Math.max(step.durationMs ** 0.3, 2.2),
   );
   const total = weights.reduce((sum, weight) => sum + weight, 0) || 1;
+  // Two decimals: browsers shorten longer values in inline styles, which would
+  // make the hydrated markup differ from the prerendered HTML.
+  const percent = (value: number) => Math.round((value / total) * 10_000) / 100;
   let cursor = 0;
   return weights.map((weight) => {
-    const left = (cursor / total) * 100;
+    const left = percent(cursor);
     cursor += weight;
-    return { left, width: (weight / total) * 100 };
+    return { left, width: percent(weight) };
   });
 }
 

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { DocsArticle } from "@/components/docs/article";
 import { docsPages } from "@/content/docs/nav";
 import { getDocsPage } from "@/content/docs/pages";
+import { pageMetadata } from "@/lib/metadata";
 
 export const dynamicParams = false;
 
@@ -14,11 +15,11 @@ export async function generateMetadata({ params }: PageProps<"/docs/[slug]">): P
   const { slug } = await params;
   const page = getDocsPage(slug);
   if (!page) return {};
-  return {
+  return pageMetadata({
     title: `${page.title} · Docs`,
     description: page.description,
-    alternates: { canonical: `/docs/${page.slug}` },
-  };
+    path: `/docs/${page.slug}`,
+  });
 }
 
 export default async function DocsArticlePage({ params }: PageProps<"/docs/[slug]">) {

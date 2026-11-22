@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/ui/code-block";
 import { capabilities, getCapability } from "@/content/capabilities";
 import { capabilityPages } from "@/content/capability-pages";
+import { pageMetadata } from "@/lib/metadata";
 
 export const dynamicParams = false;
 
@@ -32,11 +33,11 @@ export async function generateMetadata({
   const capability = getCapability(slug);
   if (!capability) return {};
 
-  return {
+  return pageMetadata({
     title: capability.name,
     description: capabilityPages[capability.slug].metaDescription,
-    alternates: { canonical: `/platform/${capability.slug}` },
-  };
+    path: `/platform/${capability.slug}`,
+  });
 }
 
 export default async function CapabilityPage({ params }: PageProps<"/platform/[slug]">) {

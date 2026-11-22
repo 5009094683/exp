@@ -6,12 +6,13 @@ import { LeadFormCard } from "@/components/leads/lead-form-card";
 import { Container, Eyebrow } from "@/components/marketing/layout";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact",
   description: `Get in touch with the ${site.product.name} team about the platform, pricing, security or partnerships.`,
-  alternates: { canonical: "/contact" },
-};
+  path: "/contact",
+});
 
 type Channel = { icon: LucideIcon; title: string; body: string; label: string; href: string };
 

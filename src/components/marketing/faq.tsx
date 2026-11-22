@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { JsonLd } from "@/components/json-ld";
 import { FaqAccordion } from "./faq-accordion";
 import { Container, Section, SectionHeading } from "./layout";
 
@@ -32,13 +33,7 @@ export function FaqSection({
         <SectionHeading eyebrow="FAQ" title={title} description={description} className="reveal" />
         <FaqAccordion items={items} />
       </Container>
-      <script
-        type="application/ld+json"
-        // The content is built from static strings above, never from user input.
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={structuredData} />
     </Section>
   );
 }

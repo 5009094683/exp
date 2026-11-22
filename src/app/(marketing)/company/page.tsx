@@ -7,12 +7,13 @@ import { Container, Eyebrow, Section, SectionHeading } from "@/components/market
 import { PageHero } from "@/components/marketing/page-hero";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Company",
   description: `${site.company.name} builds ${site.product.name}, the infrastructure that lets companies trust autonomous AI agents with real work.`,
-  alternates: { canonical: "/company" },
-};
+  path: "/company",
+});
 
 const principles = [
   {

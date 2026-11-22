@@ -6,16 +6,45 @@ import { EarlyAccessProvider } from "@/components/leads/early-access-provider";
 import { SiteProvider } from "@/components/site-provider";
 import { publicSite, site } from "@/config/site";
 import { PAGE_BACKGROUND } from "@/config/site-schema";
+import { DEFAULT_TITLE, SOCIAL_IMAGE } from "@/lib/metadata";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.product.name} — ${site.product.tagline}`,
+    default: DEFAULT_TITLE,
     template: `%s — ${site.product.name}`,
   },
   description: site.product.description,
   applicationName: site.product.name,
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/app-icon-192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: [{ url: "/app-icon-180.png", sizes: "180x180" }],
+  },
+  // Pages that set their own Open Graph data replace these defaults.
+  openGraph: {
+    type: "website",
+    siteName: site.product.name,
+    locale: "en_US",
+    title: DEFAULT_TITLE,
+    description: site.product.description,
+    images: [SOCIAL_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_TITLE,
+    description: site.product.description,
+    images: [SOCIAL_IMAGE],
+    ...(site.seo.xHandle ? { site: site.seo.xHandle } : {}),
+  },
+  ...(site.seo.noindex ? { robots: { index: false, follow: false } } : {}),
+  ...(site.seo.googleSiteVerification
+    ? { verification: { google: site.seo.googleSiteVerification } }
+    : {}),
 };
 
 export const viewport: Viewport = {

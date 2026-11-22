@@ -13,12 +13,13 @@ import { site } from "@/config/site";
 import { capabilities } from "@/content/capabilities";
 import { capabilityPages } from "@/content/capability-pages";
 import { cn } from "@/lib/cn";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Platform",
   description: `How ${site.product.name} works: orchestration, memory, MCP integrations, permissions, audit logs and sandboxed execution behind one control plane.`,
-  alternates: { canonical: "/platform" },
-};
+  path: "/platform",
+});
 
 const openness = [
   {

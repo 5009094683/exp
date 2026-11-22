@@ -5,12 +5,13 @@ import { LeadFormCard } from "@/components/leads/lead-form-card";
 import { Container, Eyebrow } from "@/components/marketing/layout";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Request early access",
   description: `Request early access to ${site.product.name}: a workspace for your team to build, run and govern autonomous AI agents.`,
-  alternates: { canonical: "/early-access" },
-};
+  path: "/early-access",
+});
 
 const benefits = [
   {

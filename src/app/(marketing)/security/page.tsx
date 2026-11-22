@@ -25,12 +25,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
 import type { ComplianceStatus } from "@/config/site-schema";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Security",
   description: `How ${site.product.name} keeps autonomous agents constrained, attributed and recorded: least privilege, isolation, audit logs and human approvals.`,
-  alternates: { canonical: "/security" },
-};
+  path: "/security",
+});
 
 const principles: Feature[] = [
   {

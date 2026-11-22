@@ -12,12 +12,13 @@ import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
 import { plans, pricingNotes, usageRates } from "@/content/pricing";
 import { cn } from "@/lib/cn";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Pricing",
   description: `${site.product.name} pricing: a monthly price per agent with executions included, metered usage beyond that and enterprise licensing for large fleets.`,
-  alternates: { canonical: "/pricing" },
-};
+  path: "/pricing",
+});
 
 type Cell = string | boolean;
 

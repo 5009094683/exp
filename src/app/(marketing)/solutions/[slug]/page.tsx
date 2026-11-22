@@ -14,6 +14,7 @@ import { getCapability } from "@/content/capabilities";
 import { solutionPages } from "@/content/solution-pages";
 import { getSolution, solutions } from "@/content/solutions";
 import { getAgent } from "@/demo/agents";
+import { pageMetadata } from "@/lib/metadata";
 
 export const dynamicParams = false;
 
@@ -28,11 +29,11 @@ export async function generateMetadata({
   const solution = getSolution(slug);
   if (!solution) return {};
 
-  return {
+  return pageMetadata({
     title: `For ${solution.name.toLowerCase()}`,
     description: solutionPages[solution.slug].metaDescription,
-    alternates: { canonical: `/solutions/${solution.slug}` },
-  };
+    path: `/solutions/${solution.slug}`,
+  });
 }
 
 export default async function SolutionPage({ params }: PageProps<"/solutions/[slug]">) {

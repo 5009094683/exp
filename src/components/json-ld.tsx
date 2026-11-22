@@ -1,0 +1,11 @@
+import { serializeJsonLd } from "@/lib/structured-data";
+
+/** Structured data for search engines. Pass data built from site content, never user input. */
+export function JsonLd({ data }: { data: unknown }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
+    />
+  );
+}

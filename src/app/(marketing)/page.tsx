@@ -19,10 +19,12 @@ import { Container } from "@/components/marketing/layout";
 import { HeroConsole } from "@/components/marketing/visuals/hero-console";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
+export const metadata: Metadata = pageMetadata({
+  description: site.product.description,
+  path: "/",
+});
 
 const faq: FaqItem[] = [
   {

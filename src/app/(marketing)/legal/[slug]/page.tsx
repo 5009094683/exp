@@ -7,6 +7,7 @@ import { Container, Eyebrow } from "@/components/marketing/layout";
 import { site } from "@/config/site";
 import { getLegalDocument, legalDocuments } from "@/content/legal";
 import { cn } from "@/lib/cn";
+import { pageMetadata } from "@/lib/metadata";
 
 export const dynamicParams = false;
 
@@ -18,11 +19,11 @@ export async function generateMetadata({ params }: PageProps<"/legal/[slug]">): 
   const { slug } = await params;
   const document = getLegalDocument(slug);
   if (!document) return {};
-  return {
+  return pageMetadata({
     title: document.title,
     description: document.description,
-    alternates: { canonical: `/legal/${document.slug}` },
-  };
+    path: `/legal/${document.slug}`,
+  });
 }
 
 function formatEffectiveDate(date: string): string {

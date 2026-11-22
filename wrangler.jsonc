@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "agentos-website",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-22",
+  // Keep variables and secrets added in the Cloudflare dashboard when deploying.
+  "keep_vars": true,
+  "assets": {
+    // Produced by `pnpm build:static` (Next.js static export).
+    "directory": "./out",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Pages are served straight from static assets; only the API runs Worker code.
+    "run_worker_first": ["/api/*"],
+  },
+  "observability": {
+    "enabled": true,
+    "logs": { "enabled": true, "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 1 },
+  },
+}

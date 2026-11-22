@@ -1,0 +1,12 @@
+.next
+out
+build
+node_modules
+pnpm-lock.yaml
+.wrangler
+.rebrand-check
+playwright-report
+test-results
+worker/worker-configuration.d.ts
+next-env.d.ts
+AGENTS.md

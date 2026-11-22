@@ -1,0 +1,21 @@
+# Runtime values for the Cloudflare Worker when it runs locally (`pnpm preview:cf`).
+# Copy this file to .dev.vars and uncomment what you need. In production, set
+# the same names under Worker > Settings > Variables and Secrets, or with
+# `wrangler secret put <NAME>`.
+#
+# Keep every line here commented out: the type check reads this file so that
+# generated Worker types do not depend on anyone's local .dev.vars.
+
+# Slack or Discord incoming webhook, or any endpoint that accepts a JSON POST.
+# LEADS_WEBHOOK_URL=""
+
+# Email notifications through Resend. All three are needed.
+# RESEND_API_KEY=""
+# LEADS_TO_EMAIL="founders@example.com"
+# LEADS_FROM_EMAIL="Website <website@example.com>"
+
+# Extra origins allowed to post to the forms, comma separated.
+# LEADS_ALLOWED_ORIGINS=""
+
+# Product name used in notification subjects. Defaults to the site's host.
+# SITE_PRODUCT_NAME=""

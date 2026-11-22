@@ -93,8 +93,13 @@ for (const file of files) {
   }
 
   if (extension === ".html") {
+    // Code samples may show `null` on purpose (a JSON value in the docs), so
+    // only text outside code is checked for leaked placeholders.
+    const prose = content
+      .replace(/<pre[\s\S]*?<\/pre>/g, "")
+      .replace(/<code[\s\S]*?<\/code>/g, "");
     for (const placeholder of placeholders) {
-      if (content.includes(placeholder)) {
+      if (prose.includes(placeholder)) {
         findings.push(`${relative(outputPath, file)}: renders "${placeholder}"`);
       }
     }

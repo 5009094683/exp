@@ -9,4 +9,10 @@ export type LegalSlug = "privacy" | "terms" | "cookies";
  * the dynamic sections are listed here; `<Link href>` still validates each one.
  */
 export type AppRoute =
-  Route | `/platform/${CapabilitySlug}` | `/solutions/${SolutionSlug}` | `/legal/${LegalSlug}`;
+  | Route
+  | `/platform/${CapabilitySlug}`
+  | `/solutions/${SolutionSlug}`
+  | `/legal/${LegalSlug}`
+  | `/docs/${string}`
+  | `/console/agents/${string}`
+  | `/console/runs/${string}`;

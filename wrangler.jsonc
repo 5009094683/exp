@@ -14,6 +14,15 @@
     // Pages are served straight from static assets; only the API runs Worker code.
     "run_worker_first": ["/api/*"],
   },
+  // Caps form submissions per visitor so the webhook and inbox cannot be flooded.
+  "ratelimits": [
+    {
+      "name": "LEADS_RATE_LIMITER",
+      // Any integer that is unique within your Cloudflare account.
+      "namespace_id": "7301",
+      "simple": { "limit": 30, "period": 60 },
+    },
+  ],
   "observability": {
     "enabled": true,
     "logs": { "enabled": true, "head_sampling_rate": 1 },

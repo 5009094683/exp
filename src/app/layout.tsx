@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { CSSProperties, ReactNode } from "react";
+import { EarlyAccessProvider } from "@/components/leads/early-access-provider";
 import { SiteProvider } from "@/components/site-provider";
 import { publicSite, site } from "@/config/site";
 import { PAGE_BACKGROUND } from "@/config/site-schema";
@@ -44,7 +45,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
-        <SiteProvider value={publicSite}>{children}</SiteProvider>
+        <SiteProvider value={publicSite}>
+          <EarlyAccessProvider>{children}</EarlyAccessProvider>
+        </SiteProvider>
       </body>
     </html>
   );

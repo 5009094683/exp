@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { EarlyAccessButton } from "@/components/early-access/early-access-button";
+import { EarlyAccessButton } from "@/components/leads/early-access-button";
 import { PageHero } from "@/components/marketing/page-hero";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";

@@ -19,8 +19,8 @@
     "format:check": "prettier --check .",
     "typecheck": "next typegen && tsc --noEmit && wrangler types worker/worker-configuration.d.ts --check && tsc --noEmit -p worker",
     "test": "vitest run",
-    "test:e2e:server": "pnpm build && cross-env E2E_TARGET=server playwright test",
-    "test:e2e:static": "pnpm build:static && cross-env E2E_TARGET=static playwright test",
+    "test:e2e:server": "node scripts/e2e.mjs server",
+    "test:e2e:static": "node scripts/e2e.mjs static",
     "test:e2e": "pnpm test:e2e:server && pnpm test:e2e:static",
     "check:rebrand": "node scripts/check-rebrand.mjs"
   },

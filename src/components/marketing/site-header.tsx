@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
-import { EarlyAccessButton } from "@/components/early-access/early-access-button";
+import { EarlyAccessButton } from "@/components/leads/early-access-button";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
 import { capabilities } from "@/content/capabilities";

@@ -21,6 +21,8 @@ const isStatic = target === "static";
 
 const nextConfig: NextConfig = {
   output: isStatic ? "export" : undefined,
+  // With a static export, `distDir` is where the exported site is written.
+  distDir: isStatic && process.env.EXPORT_DIR ? process.env.EXPORT_DIR : undefined,
   // API routes are named `route.server.ts`, so they only exist in the server target.
   pageExtensions: isStatic ? ["tsx", "ts"] : ["tsx", "ts", "server.ts"],
   // Cache Components stays off: a static export requires route handlers to set

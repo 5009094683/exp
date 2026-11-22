@@ -53,6 +53,9 @@ jobs:
       - name: End-to-end tests, static target (wrangler dev)
         run: pnpm test:e2e:static
 
+      - name: Rebrand check (no default branding survives a rename)
+        run: pnpm check:rebrand
+
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4

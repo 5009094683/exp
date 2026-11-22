@@ -4,8 +4,8 @@ import { CalendarClock, CircleCheck } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useSite } from "@/components/site-provider";
 import { Button } from "@/components/ui/button";
+import { EARLY_ACCESS_STORAGE_KEY } from "@/lib/leads/storage";
 import { useStoredValue } from "@/lib/use-stored-value";
-import { EARLY_ACCESS_STORAGE_KEY } from "./early-access-provider";
 import { LeadForm, type LeadFormVariant } from "./lead-form";
 
 /** A form that replaces itself with a confirmation once the request is sent. */

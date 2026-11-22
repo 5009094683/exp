@@ -273,7 +273,10 @@ export default function SecurityPage() {
             </Button>
           </div>
 
-          <div className="reveal rounded-2xl border border-line bg-surface p-7 edge-highlight md:p-9">
+          <div
+            id="disclosure"
+            className="reveal scroll-mt-24 rounded-2xl border border-line bg-surface p-7 edge-highlight md:p-9"
+          >
             <Eyebrow>Responsible disclosure</Eyebrow>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-fg">
               Found a vulnerability?

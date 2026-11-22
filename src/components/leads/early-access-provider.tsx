@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { EARLY_ACCESS_STORAGE_KEY } from "@/lib/leads/storage";
 import { useStoredValue } from "@/lib/use-stored-value";
 import { GATES, type GateId } from "./gates";
 import { LeadForm } from "./lead-form";
@@ -27,9 +28,6 @@ type OpenOptions = {
 type EarlyAccessContextValue = { open: (options: OpenOptions) => void };
 
 const EarlyAccessContext = createContext<EarlyAccessContextValue | null>(null);
-
-/** Remembers that this browser already sent a request, so gates stop asking. */
-export const EARLY_ACCESS_STORAGE_KEY = "early-access-request";
 
 /** Returns `null` outside the provider; callers then fall back to the form page. */
 export function useEarlyAccess(): EarlyAccessContextValue | null {

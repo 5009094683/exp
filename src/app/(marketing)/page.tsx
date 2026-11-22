@@ -70,7 +70,7 @@ function Hero() {
       />
 
       <Container className="relative pt-16 pb-20 md:pt-24 md:pb-28">
-        <div className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto max-w-5xl text-center">
           <Link
             href="/early-access"
             className="group inline-flex animate-fade-up items-center gap-2.5 rounded-full border border-line-strong bg-white/[0.04] py-1 pr-3 pl-1.5 text-[13px] text-fg-muted transition-colors hover:border-white/25 hover:text-fg"
@@ -85,9 +85,9 @@ function Hero() {
             />
           </Link>
 
-          <h1 className="mt-7 animate-fade-up text-gradient text-[2.6rem] leading-[1.04] font-semibold tracking-[-0.035em] anim-delay-75 sm:text-6xl md:text-7xl">
+          <h1 className="mt-7 animate-fade-up text-gradient text-[2.6rem] leading-[1.04] font-semibold tracking-[-0.035em] anim-delay-75 sm:text-6xl lg:text-7xl">
             Run thousands of AI agents.
-            <br className="hidden sm:block" /> Keep control of every action.
+            <br className="hidden lg:block" /> Keep control of every action.
           </h1>
 
           <p className="mx-auto mt-7 max-w-2xl animate-fade-up text-lg leading-relaxed text-fg-muted anim-delay-150 md:text-xl">

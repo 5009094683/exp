@@ -523,9 +523,10 @@ export function ProofSection() {
     <Section divider>
       <Container>
         {stats.length > 0 ? (
-          <dl className="reveal grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+          // Cells grow to fill each row, so one stat or seven both sit flush.
+          <dl className="reveal flex flex-wrap gap-px overflow-hidden rounded-2xl border border-line bg-line">
             {stats.map((stat) => (
-              <div key={stat.label} className="bg-bg p-7">
+              <div key={stat.label} className="min-w-0 flex-1 basis-56 bg-bg p-7">
                 <dd className="text-4xl font-semibold tracking-tight text-fg">{stat.value}</dd>
                 <dt className="mt-2 text-[15px] text-fg-muted">{stat.label}</dt>
               </div>
@@ -534,13 +535,25 @@ export function ProofSection() {
         ) : null}
 
         {testimonials.length > 0 ? (
-          <ul className={cn("grid gap-4 md:grid-cols-2", stats.length > 0 && "mt-10")}>
+          <ul
+            className={cn(
+              "grid grid-cols-1 gap-4",
+              testimonials.length === 2 && "md:grid-cols-2",
+              testimonials.length > 2 && "md:grid-cols-2 lg:grid-cols-3",
+              stats.length > 0 && "mt-10",
+            )}
+          >
             {testimonials.map((testimonial) => (
               <li
                 key={testimonial.quote}
-                className="reveal rounded-2xl border border-line bg-surface p-7 edge-highlight md:p-8"
+                className="reveal flex min-w-0 flex-col rounded-2xl border border-line bg-surface p-7 edge-highlight md:p-8"
               >
-                <blockquote className="text-lg leading-relaxed text-fg">
+                <blockquote
+                  className={cn(
+                    "leading-relaxed text-fg",
+                    testimonials.length === 1 ? "max-w-4xl text-xl md:text-2xl" : "text-lg",
+                  )}
+                >
                   “{testimonial.quote}”
                 </blockquote>
                 <p className="mt-6 text-sm text-fg-muted">

@@ -96,9 +96,13 @@ export default function ContactPage() {
           </p>
 
           {channels.length > 0 ? (
-            <ul className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
+            // Cells grow to fill each row, so an odd number of channels leaves no gap.
+            <ul className="mt-12 flex flex-wrap gap-px overflow-hidden rounded-2xl border border-line bg-line">
               {channels.map((channel) => (
-                <li key={channel.title} className="bg-surface p-5">
+                <li
+                  key={channel.title}
+                  className="min-w-0 flex-1 basis-full bg-surface p-5 sm:basis-2/5"
+                >
                   <channel.icon className="size-[18px] text-accent-text" aria-hidden="true" />
                   <h2 className="mt-3 text-sm font-medium text-fg">{channel.title}</h2>
                   <p className="mt-1 text-[13px] text-fg-subtle">{channel.body}</p>

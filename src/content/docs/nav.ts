@@ -39,22 +39,23 @@ export const docsNav: DocsNavGroup[] = [
       {
         slug: "memory",
         title: "Memory",
-        description: "Scopes, retention, redaction and recall.",
+        description: "Scopes, retention, redaction and recall for context that outlives a run.",
       },
       {
         slug: "integrations",
         title: "MCP integrations",
-        description: "Connect MCP servers and set per-tool permissions.",
+        description:
+          "Connect MCP servers, choose how calls authenticate and set per-tool permissions.",
       },
       {
         slug: "permissions",
         title: "Permissions and policies",
-        description: "Write, test and enforce policies with approvals.",
+        description: "Write, test and enforce policies, with approvals for high-risk actions.",
       },
       {
         slug: "audit-logs",
         title: "Audit logs",
-        description: "The event schema, search and export.",
+        description: "The audit event schema, tamper evidence, search and export.",
       },
       {
         slug: "sandboxes",

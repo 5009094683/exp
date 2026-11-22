@@ -321,7 +321,7 @@ rules:
     version: 2,
     author: "Marcus Tan",
     updatedHoursAgo: 52,
-    evaluations24h: 35818,
+    evaluations24h: 35812,
     denied24h: 0,
     approvals24h: 0,
     source: `id: spend-guardrail

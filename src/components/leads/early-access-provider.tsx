@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { EARLY_ACCESS_STORAGE_KEY } from "@/lib/leads/storage";
+import { useReturnFocus } from "@/lib/use-return-focus";
 import { useStoredValue } from "@/lib/use-stored-value";
 import { GATES, type GateId } from "./gates";
 import { LeadForm } from "./lead-form";
@@ -80,10 +81,16 @@ export function EarlyAccessProvider({ children }: { children: ReactNode }) {
   });
   const [requestedEmail, setRequestedEmail] = useStoredValue(EARLY_ACCESS_STORAGE_KEY);
 
-  const open = useCallback((options: OpenOptions) => {
-    // A new `attempt` remounts the form, which restarts its fill timer.
-    setState((current) => ({ ...options, open: true, attempt: current.attempt + 1 }));
-  }, []);
+  const { remember, restore } = useReturnFocus();
+
+  const open = useCallback(
+    (options: OpenOptions) => {
+      remember();
+      // A new `attempt` remounts the form, which restarts its fill timer.
+      setState((current) => ({ ...options, open: true, attempt: current.attempt + 1 }));
+    },
+    [remember],
+  );
 
   const value = useMemo(() => ({ open }), [open]);
   const gate = state.gate ? GATES[state.gate] : null;
@@ -95,7 +102,7 @@ export function EarlyAccessProvider({ children }: { children: ReactNode }) {
         open={state.open}
         onOpenChange={(next) => setState((current) => ({ ...current, open: next }))}
       >
-        <DialogContent className="max-w-xl sm:p-8">
+        <DialogContent className="max-w-xl sm:p-8" onCloseAutoFocus={restore}>
           {requestedEmail ? (
             <Received email={requestedEmail} onAgain={() => setRequestedEmail(null)} />
           ) : (

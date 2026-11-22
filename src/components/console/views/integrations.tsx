@@ -26,6 +26,7 @@ import { agents } from "@/demo/agents";
 import { formatCompact, formatDuration, formatNumber, formatPercent } from "@/demo/format";
 import { catalog, servers, type McpServer, type ToolPermission } from "@/demo/integrations";
 import { cn } from "@/lib/cn";
+import { useReturnFocus } from "@/lib/use-return-focus";
 
 const PERMISSIONS: Array<{ value: ToolPermission; label: string }> = [
   { value: "allow", label: "Allow" },
@@ -182,6 +183,11 @@ function CustomServerForm() {
 export function IntegrationsView() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<McpServer | null>(null);
+  const { remember, restore } = useReturnFocus();
+  const openDetail = (item: McpServer) => {
+    remember();
+    setSelected(item);
+  };
 
   const visible = servers.filter((server) =>
     `${server.name} ${server.category} ${server.description}`
@@ -262,14 +268,14 @@ export function IntegrationsView() {
                   ).length;
                   const blocked = server.tools.filter((tool) => tool.permission === "deny").length;
                   return (
-                    <tr key={server.id} className={rowLink} onClick={() => setSelected(server)}>
+                    <tr key={server.id} className={rowLink} onClick={() => openDetail(server)}>
                       <Td>
                         <div className="flex items-center gap-3">
                           <Monogram name={server.name} />
                           <div className="min-w-0">
                             <button
                               type="button"
-                              onClick={() => setSelected(server)}
+                              onClick={() => openDetail(server)}
                               className="font-medium text-fg hover:underline"
                             >
                               {server.name}
@@ -360,7 +366,7 @@ export function IntegrationsView() {
         open={selected !== null}
         onOpenChange={(open) => (open ? undefined : setSelected(null))}
       >
-        <SheetContent className="max-w-lg">
+        <SheetContent className="max-w-lg" onCloseAutoFocus={restore}>
           {selected ? <ServerSheet server={selected} /> : null}
         </SheetContent>
       </Dialog>

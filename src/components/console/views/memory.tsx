@@ -20,11 +20,17 @@ import { Dialog, DialogDescription, DialogTitle, SheetContent } from "@/componen
 import { formatCompact, formatNumber } from "@/demo/format";
 import { memoryEntries, memoryScopes, type MemoryEntry } from "@/demo/memory";
 import { cn } from "@/lib/cn";
+import { useReturnFocus } from "@/lib/use-return-focus";
 
 export function MemoryView() {
   const [scope, setScope] = useState("all");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<MemoryEntry | null>(null);
+  const { remember, restore } = useReturnFocus();
+  const openDetail = (item: MemoryEntry) => {
+    remember();
+    setSelected(item);
+  };
 
   const totals = memoryScopes.reduce(
     (sum, item) => ({
@@ -138,7 +144,7 @@ export function MemoryView() {
               <li key={entry.id}>
                 <button
                   type="button"
-                  onClick={() => setSelected(entry)}
+                  onClick={() => openDetail(entry)}
                   className="flex w-full flex-col gap-2 px-4 py-3 text-left transition-colors hover:bg-white/[0.03] sm:flex-row sm:items-start sm:gap-6"
                 >
                   <span className="min-w-0 flex-1">
@@ -171,7 +177,7 @@ export function MemoryView() {
         open={selected !== null}
         onOpenChange={(open) => (open ? undefined : setSelected(null))}
       >
-        <SheetContent className="max-w-lg">
+        <SheetContent className="max-w-lg" onCloseAutoFocus={restore}>
           {selected ? (
             <div className="space-y-5 p-6">
               <div className="pr-8">

@@ -48,6 +48,7 @@ import {
   type AuditOutcome,
 } from "@/demo/audit";
 import { formatNumber } from "@/demo/format";
+import { useReturnFocus } from "@/lib/use-return-focus";
 
 const PAGE_SIZE = 20;
 
@@ -149,6 +150,11 @@ export function AuditView() {
   const [outcome, setOutcome] = useState("all");
   const [page, setPage] = useState(0);
   const [selected, setSelected] = useState<AuditEvent | null>(null);
+  const { remember, restore } = useReturnFocus();
+  const openDetail = (item: AuditEvent) => {
+    remember();
+    setSelected(item);
+  };
 
   const filtered = auditEvents.filter((event) => {
     const text =
@@ -280,11 +286,11 @@ export function AuditView() {
               {visible.map((event) => {
                 const ActorIcon = ACTOR_ICONS[event.actor.type];
                 return (
-                  <tr key={event.id} className={rowLink} onClick={() => setSelected(event)}>
+                  <tr key={event.id} className={rowLink} onClick={() => openDetail(event)}>
                     <Td className="max-w-0 sm:hidden">
                       <button
                         type="button"
-                        onClick={() => setSelected(event)}
+                        onClick={() => openDetail(event)}
                         className="block max-w-full truncate text-left text-fg"
                       >
                         {event.action}
@@ -309,7 +315,7 @@ export function AuditView() {
                     <Td className="hidden whitespace-nowrap sm:table-cell">
                       <button
                         type="button"
-                        onClick={() => setSelected(event)}
+                        onClick={() => openDetail(event)}
                         className="text-fg hover:underline"
                       >
                         {event.action}
@@ -366,7 +372,7 @@ export function AuditView() {
         open={selected !== null}
         onOpenChange={(open) => (open ? undefined : setSelected(null))}
       >
-        <SheetContent className="max-w-lg">
+        <SheetContent className="max-w-lg" onCloseAutoFocus={restore}>
           {selected ? <EventSheet event={selected} /> : null}
         </SheetContent>
       </Dialog>

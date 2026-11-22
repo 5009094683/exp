@@ -26,6 +26,7 @@ import { formatDuration, formatNumber } from "@/demo/format";
 import { sandboxSessions, type SandboxSession } from "@/demo/sandbox-sessions";
 import { getSandboxTemplate, sandboxTemplates } from "@/demo/sandboxes";
 import { sandboxSessions24h } from "@/demo/usage";
+import { useReturnFocus } from "@/lib/use-return-focus";
 
 type StatusFilter = "all" | SandboxSession["status"];
 
@@ -125,6 +126,11 @@ function SessionSheet({ session }: { session: SandboxSession }) {
 export function SandboxesView() {
   const [status, setStatus] = useState<StatusFilter>("all");
   const [selected, setSelected] = useState<SandboxSession | null>(null);
+  const { remember, restore } = useReturnFocus();
+  const openDetail = (item: SandboxSession) => {
+    remember();
+    setSelected(item);
+  };
 
   const visible = sandboxSessions.filter(
     (session) => status === "all" || session.status === status,
@@ -205,11 +211,11 @@ export function SandboxesView() {
                 {visible.map((session) => {
                   const blockedCount = session.egress.filter((entry) => !entry.allowed).length;
                   return (
-                    <tr key={session.id} className={rowLink} onClick={() => setSelected(session)}>
+                    <tr key={session.id} className={rowLink} onClick={() => openDetail(session)}>
                       <Td className="whitespace-nowrap">
                         <button
                           type="button"
-                          onClick={() => setSelected(session)}
+                          onClick={() => openDetail(session)}
                           className="hover:underline"
                         >
                           <Mono className="text-fg">{session.id}</Mono>
@@ -322,7 +328,7 @@ export function SandboxesView() {
         open={selected !== null}
         onOpenChange={(open) => (open ? undefined : setSelected(null))}
       >
-        <SheetContent className="max-w-lg">
+        <SheetContent className="max-w-lg" onCloseAutoFocus={restore}>
           {selected ? <SessionSheet session={selected} /> : null}
         </SheetContent>
       </Dialog>

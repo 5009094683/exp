@@ -314,8 +314,8 @@ export const scenarios: Record<string, Scenario[]> = {
         },
         {
           kind: "approval",
-          title: "Risk analyst approval",
-          ref: "group:risk-analysts",
+          title: "Finance approval",
+          ref: "group:finance-controllers",
           ms: [1, 2],
           policy: {
             id: "payments-over-1000",
@@ -323,10 +323,10 @@ export const scenarios: Record<string, Scenario[]> = {
             reason: "Refund of $1,840.00 is above the $1,000 threshold.",
           },
           approval: {
-            approvers: "group:risk-analysts",
+            approvers: "group:finance-controllers",
             channel: "Console",
             request: "Refund $1,840.00 on pi_3Qd81x and block the card?",
-            decidedBy: "Aisha Karim",
+            decidedBy: "Marcus Tan",
             waitMs: [140_000, 420_000],
           },
         },
@@ -338,7 +338,7 @@ export const scenarios: Record<string, Scenario[]> = {
           policy: {
             id: "payments-over-1000",
             decision: "allow",
-            reason: "Approved by Aisha Karim.",
+            reason: "Approved by Marcus Tan.",
           },
           input: { payment: "pi_3Qd81x", amount: 1840.0, reason: "fraudulent" },
           output: { refund: "re_3Qd9aa", status: "succeeded" },
@@ -360,12 +360,12 @@ export const scenarios: Record<string, Scenario[]> = {
           title: "Run complete",
           ref: "result",
           ms: [2, 6],
-          output: { action: "refunded", amount: 1840.0, approved_by: "Aisha Karim" },
+          output: { action: "refunded", amount: 1840.0, approved_by: "Marcus Tan" },
         },
       ],
       outcomes: {
-        succeeded: "Refunded $1,840.00 as likely fraud after analyst approval.",
-        awaiting_approval: "Waiting for a risk analyst to approve a $1,840.00 refund.",
+        succeeded: "Refunded $1,840.00 as likely fraud after finance approval.",
+        awaiting_approval: "Waiting for a finance controller to approve a $1,840.00 refund.",
         failed: "Payment lookup was rate limited by the upstream API.",
       },
     },

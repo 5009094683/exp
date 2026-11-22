@@ -83,7 +83,7 @@ export const agents: Agent[] = [
     version: 27,
     model: "reasoning",
     instructions:
-      "For every flagged payment, pull the payment's risk signals and the customer's order history, assess the likelihood of fraud and recommend an action. Refunds above the approval threshold need a risk analyst.",
+      "For every flagged payment, pull the payment's risk signals and the customer's order history, assess the likelihood of fraud and recommend an action. Refunds above the approval threshold need a finance approver.",
     triggers: [{ type: "event", label: "stripe · early_fraud_warning" }],
     tools: [
       "stripe.get_payment_intent",

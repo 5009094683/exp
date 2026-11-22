@@ -1,16 +1,30 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useSyncExternalStore, type ReactNode } from "react";
 import { formatAgo, formatTimestamp, minutesBefore } from "@/demo/format";
 
 const ClockContext = createContext<number | null>(null);
 
+const MINUTE_MS = 60_000;
+let visitTime: number | undefined;
+
+/** The minute this visit started. Read once so every view agrees on it. */
+function getVisitTime(): number {
+  visitTime ??= Math.floor(Date.now() / MINUTE_MS) * MINUTE_MS;
+  return visitTime;
+}
+
+const subscribe = () => () => {};
+
 /**
- * Fixes "now" for the demo workspace to the moment the site was built, so the
- * prerendered HTML and the browser agree on every relative time.
+ * "Now" for the demo workspace. The prerendered HTML is anchored to the build
+ * time so the server and the browser agree while the page hydrates; after
+ * that the clock moves to the visitor's present. Sample data is defined
+ * relative to the clock, so a site built months ago still shows today's dates.
  */
-export function DemoClock({ now, children }: { now: number; children: ReactNode }) {
-  return <ClockContext.Provider value={now}>{children}</ClockContext.Provider>;
+export function DemoClock({ builtAt, children }: { builtAt: number; children: ReactNode }) {
+  const now = useSyncExternalStore(subscribe, getVisitTime, () => builtAt);
+  return <ClockContext value={now}>{children}</ClockContext>;
 }
 
 export function useNow(): number {

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function ConsoleLayout({ children }: { children: ReactNode }) {
   return (
-    <DemoClock now={buildTime}>
+    <DemoClock builtAt={buildTime}>
       <TooltipProvider delayDuration={150}>
         <ConsoleShell>{children}</ConsoleShell>
       </TooltipProvider>

@@ -108,13 +108,20 @@ export function RunsTable({
   );
 }
 
-export function RunsListView() {
-  const params = useSearchParams();
-  const initialStatus = params.get("status");
+/**
+ * The runs list with the status filter taken from `?status=`. The query
+ * string is only known in the browser, so the page prerenders the unfiltered
+ * list as the fallback and this takes over once it loads.
+ */
+export function RunsListFromUrl() {
+  const status = useSearchParams().get("status");
+  const initialStatus = isStatus(status) ? status : "all";
+  return <RunsListView key={initialStatus} initialStatus={initialStatus} />;
+}
+
+export function RunsListView({ initialStatus = "all" }: { initialStatus?: StatusFilter }) {
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState<StatusFilter>(
-    isStatus(initialStatus) ? initialStatus : "all",
-  );
+  const [status, setStatus] = useState<StatusFilter>(initialStatus);
   const [agent, setAgent] = useState("all");
 
   const visible = runs.filter((run) => {

@@ -84,6 +84,20 @@ test.describe("demo console", () => {
     await expect(rows).toHaveCount(total);
   });
 
+  test("the runs list is prerendered and honors a status in the URL", async ({ page, request }) => {
+    const html = await (await request.get("/console/runs")).text();
+    expect(html).toMatch(/run_[0-9a-z]{12}/);
+
+    await page.goto("/console/runs?status=failed");
+    await expect(page.getByRole("button", { name: /^Failed/ })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    const rows = await page.locator("tbody tr").allInnerTexts();
+    expect(rows.length).toBeGreaterThan(0);
+    for (const text of rows) expect(text).toContain("Failed");
+  });
+
   test("the audit log pages through events and shows how they are chained", async ({ page }) => {
     await page.goto("/console/audit");
     await expect(page.getByText("Chain verified")).toBeVisible();

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { securityHeaders } from "./src/config/headers";
 
 /**
  * Two build targets share one codebase:
@@ -28,7 +29,25 @@ const nextConfig: NextConfig = {
   // Cache Components stays off: a static export requires route handlers to set
   // `dynamic = "force-static"`, which Cache Components rejects (Next.js 16.4).
   typedRoutes: true,
+  poweredByHeader: false,
   images: { unoptimized: true },
+  // A static export has no server to add headers; static hosts read `public/_headers`.
+  ...(isStatic
+    ? {}
+    : {
+        async headers() {
+          return [
+            {
+              source: "/:path*",
+              headers: securityHeaders({
+                // The dev server needs eval and a websocket, which the policy forbids.
+                contentSecurityPolicy: process.env.NODE_ENV !== "development",
+                vercelPreview: process.env.VERCEL_ENV === "preview",
+              }),
+            },
+          ];
+        },
+      }),
   turbopack: {
     rules: {
       "*.css": {

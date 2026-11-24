@@ -115,7 +115,7 @@ test.describe("configured details", () => {
     await expect(page.getByText("Initech").first()).toBeVisible();
 
     const footer = page.getByRole("contentinfo");
-    await expect(footer).toContainText("Example Labs, Inc.");
+    await expect(footer).toContainText(/Example Labs, Inc\. All rights reserved\./);
     await expect(footer).toContainText(
       "100 Example Street, Suite 200, San Francisco, CA 94105, United States",
     );

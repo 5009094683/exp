@@ -92,6 +92,8 @@ export function SiteFooter() {
   const social = socialLinks.filter((item) => site.social[item.key]);
   const { company } = site;
   const { email, phone } = site.contact;
+  // A legal name such as "Example, Inc." already carries the period that ends the sentence.
+  const copyrightOwner = company.legalName.replace(/\.$/, "");
 
   return (
     <footer className="border-t border-line bg-bg-subtle">
@@ -159,7 +161,7 @@ export function SiteFooter() {
           {/* Keeps its own width, up to half the row, so a long address cannot squeeze it. */}
           <div className="space-y-1 md:max-w-[50%] md:shrink-0">
             <p>
-              © {site.copyrightYear} {company.legalName}. All rights reserved.
+              © {site.copyrightYear} {copyrightOwner}. All rights reserved.
             </p>
             {company.registration ? <p>{company.registration}</p> : null}
           </div>

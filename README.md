@@ -128,8 +128,9 @@ time to fill in the form, and a check that the request comes from the site's own
 Cloudflare a rate limit also caps submissions per visitor; on Vercel, add a rate limiting rule in
 the firewall if you need one.
 
-If a request cannot be sent, the form shows a prefilled email link to `SITE_CONTACT_EMAIL`. The
-same fallback applies on a host with no function runtime.
+If a request cannot be sent, the form offers a prefilled email to `SITE_CONTACT_EMAIL` and the
+phone number in `SITE_CONTACT_PHONE`, whichever are set. The same fallback applies on a host with
+no function runtime.
 
 ## Deploy to Vercel
 
@@ -222,7 +223,8 @@ To run the Worker locally, build once with `pnpm build:static`, copy `.dev.vars.
 
 `pnpm build:static` produces a complete site in `out/`, including a `_headers` file that several
 static hosts read. The forms need something to answer `/api/early-access` and `/api/contact`;
-without it they fall back to the email link, so set `SITE_CONTACT_EMAIL`.
+without it they fall back to the email link and the phone number, so set `SITE_CONTACT_EMAIL` or
+`SITE_CONTACT_PHONE`.
 
 ## Before you launch
 

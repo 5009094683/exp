@@ -101,7 +101,7 @@ test.describe("contact page", () => {
 });
 
 test.describe("hosts without a function runtime", () => {
-  test("the form offers a prefilled email instead", async ({ page }) => {
+  test("the form offers a prefilled email and the phone number instead", async ({ page }) => {
     // A purely static host answers the form endpoint with its HTML 404 page.
     await page.route("**/api/contact", (route) =>
       route.fulfill({ status: 404, contentType: "text/html", body: "<h1>Not found</h1>" }),
@@ -114,13 +114,18 @@ test.describe("hosts without a function runtime", () => {
     await page.getByLabel("Message").fill("Please send pricing.");
     await page.getByRole("button", { name: "Send message" }).click();
 
-    await expect(
-      page.getByRole("alert").filter({ hasText: "We couldn't send your request." }),
-    ).toBeVisible();
-    const fallback = page.getByRole("link", { name: "Send it by email instead" });
+    const alert = page.getByRole("alert").filter({ hasText: "We couldn't send your request." });
+    await expect(alert).toHaveText(
+      "We couldn't send your request. Send it by email instead, or call us at +1 415 555 0100.",
+    );
+    const fallback = alert.getByRole("link", { name: "Send it by email instead" });
     const href = await fallback.getAttribute("href");
     expect(href).toMatch(/^mailto:hello@example\.com\?subject=Website%20enquiry/);
     expect(decodeURIComponent(href!)).toContain("Message: Please send pricing.");
+    await expect(alert.getByRole("link", { name: "+1 415 555 0100" })).toHaveAttribute(
+      "href",
+      "tel:+14155550100",
+    );
   });
 });
 

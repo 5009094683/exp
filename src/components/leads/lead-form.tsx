@@ -3,6 +3,7 @@
 import { ArrowRight, CircleAlert, LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { useId, useRef, type FormEvent, type ReactNode } from "react";
+import { useSite } from "@/components/site-provider";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Select, Textarea } from "@/components/ui/form";
 import { cn } from "@/lib/cn";
@@ -16,6 +17,7 @@ import {
   USE_CASES,
   type LeadKind,
 } from "@/lib/leads/schema";
+import { telHref } from "@/lib/phone";
 import { useLeadForm } from "./use-lead-form";
 
 type FieldConfig = {
@@ -136,6 +138,7 @@ export function LeadForm({
 }) {
   const config = FORMS[variant];
   const specs: Record<string, FieldSpec> = LEAD_FIELDS[config.kind];
+  const { phone } = useSite().contact;
   const formId = useId();
   const formRef = useRef<HTMLFormElement>(null);
   const { values, errors, status, failure, setValue, setHoneypot, submit } = useLeadForm({
@@ -243,6 +246,18 @@ export function LeadForm({
               >
                 Send it by email instead
               </a>
+            ) : null}
+            {phone ? (
+              <>
+                {failure.fallbackHref ? ", or call us at " : "You can also call us at "}
+                <a
+                  href={telHref(phone)}
+                  className="font-medium whitespace-nowrap text-fg underline underline-offset-4"
+                >
+                  {phone}
+                </a>
+                .
+              </>
             ) : null}
           </p>
         </div>

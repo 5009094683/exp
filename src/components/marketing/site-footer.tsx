@@ -11,7 +11,9 @@ import {
 import { site } from "@/config/site";
 import { capabilities } from "@/content/capabilities";
 import { solutions } from "@/content/solutions";
+import { telHref } from "@/lib/phone";
 import type { AppRoute } from "@/lib/routes";
+import { InlineAddress } from "./inline-address";
 import { Container } from "./layout";
 
 type FooterLink =
@@ -89,6 +91,7 @@ export function SiteFooter() {
   const columns = buildColumns();
   const social = socialLinks.filter((item) => site.social[item.key]);
   const { company } = site;
+  const { email, phone } = site.contact;
 
   return (
     <footer className="border-t border-line bg-bg-subtle">
@@ -152,24 +155,42 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-line pt-8 text-[13px] text-fg-subtle md:flex-row md:items-start md:justify-between">
-          <div className="space-y-1">
+        <div className="mt-14 flex flex-col gap-4 border-t border-line pt-8 text-[13px] text-fg-subtle md:flex-row md:items-start md:justify-between md:gap-10">
+          {/* Keeps its own width, up to half the row, so a long address cannot squeeze it. */}
+          <div className="space-y-1 md:max-w-[50%] md:shrink-0">
             <p>
               © {site.copyrightYear} {company.legalName}. All rights reserved.
             </p>
             {company.registration ? <p>{company.registration}</p> : null}
           </div>
-          {company.addressLines.length > 0 || site.contact.email ? (
-            <address className="space-y-1 not-italic md:text-right">
-              {company.addressLines.length > 0 ? <p>{company.addressLines.join(", ")}</p> : null}
-              {site.contact.email ? (
-                <p>
-                  <a
-                    href={`mailto:${site.contact.email}`}
-                    className="transition-colors hover:text-fg"
-                  >
-                    {site.contact.email}
-                  </a>
+          {company.addressLines.length > 0 || phone || email ? (
+            <address className="min-w-0 space-y-1 not-italic md:text-right">
+              {company.addressLines.length > 0 ? (
+                <p className="md:text-balance">
+                  <InlineAddress lines={company.addressLines} />
+                </p>
+              ) : null}
+              {phone || email ? (
+                // Stacked on phones; one line with a separator where there is room for both.
+                <p className="flex flex-col items-start gap-1 md:flex-row md:flex-wrap md:justify-end md:gap-x-2.5">
+                  {phone ? (
+                    <a
+                      href={telHref(phone)}
+                      className="whitespace-nowrap transition-colors hover:text-fg"
+                    >
+                      {phone}
+                    </a>
+                  ) : null}
+                  {phone && email ? (
+                    <span aria-hidden="true" className="hidden md:inline">
+                      ·
+                    </span>
+                  ) : null}
+                  {email ? (
+                    <a href={`mailto:${email}`} className="transition-colors hover:text-fg">
+                      {email}
+                    </a>
+                  ) : null}
                 </p>
               ) : null}
             </address>

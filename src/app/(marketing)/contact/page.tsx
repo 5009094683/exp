@@ -7,6 +7,7 @@ import { Container, Eyebrow } from "@/components/marketing/layout";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
 import { pageMetadata } from "@/lib/metadata";
+import { telHref } from "@/lib/phone";
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact",
@@ -63,7 +64,7 @@ function buildChannels(): Channel[] {
       title: "Phone",
       body: "During business hours.",
       label: contact.phone,
-      href: `tel:${contact.phone.replace(/[^\d+]/g, "")}`,
+      href: telHref(contact.phone),
     });
   }
   return channels;

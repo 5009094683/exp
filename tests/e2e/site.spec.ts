@@ -2,8 +2,11 @@ import { expect, test } from "@playwright/test";
 import { securityHeaders } from "../../src/config/headers";
 import { trackPageProblems } from "./helpers";
 
-/** The origin the e2e build is configured with (see scripts/e2e.mjs). */
+/** Details the e2e build is configured with (see scripts/e2e.mjs). */
 const SITE_URL = "https://www.example.com";
+const PHONE = "+1 415 555 0100";
+const PHONE_HREF = "tel:+14155550100";
+const ADDRESS_LINES = ["100 Example Street, Suite 200", "San Francisco, CA 94105", "United States"];
 
 test.describe("navigation", () => {
   test("the desktop menu leads to a capability page", async ({ page, isMobile }) => {
@@ -113,8 +116,12 @@ test.describe("configured details", () => {
 
     const footer = page.getByRole("contentinfo");
     await expect(footer).toContainText("Example Labs, Inc.");
-    await expect(footer).toContainText("100 Example Street, Suite 200");
+    await expect(footer).toContainText(
+      "100 Example Street, Suite 200, San Francisco, CA 94105, United States",
+    );
     await expect(footer).toContainText("Company No. 00000000");
+    await expect(footer.locator(`a[href="${PHONE_HREF}"]`)).toHaveText(PHONE);
+    await expect(footer.locator('a[href="mailto:hello@example.com"]')).toBeVisible();
     await expect(footer.getByRole("link", { name: /on LinkedIn/ })).toHaveAttribute(
       "href",
       "https://www.linkedin.com/company/example",
@@ -125,12 +132,21 @@ test.describe("configured details", () => {
     for (const address of ["sales@example.com", "support@example.com", "security@example.com"]) {
       await expect(main.locator(`a[href="mailto:${address}"]`).first()).toBeVisible();
     }
+    await expect(main.locator(`a[href="${PHONE_HREF}"]`)).toContainText(PHONE);
+    for (const line of ADDRESS_LINES) {
+      await expect(main.getByText(line, { exact: true })).toBeVisible();
+    }
   });
 
   test("fill in the company, security and legal pages", async ({ page }) => {
     await page.goto("/company");
     await expect(page.getByText("Test Founder")).toBeVisible();
     await expect(page.getByText("Example Ventures")).toBeVisible();
+
+    const facts = page.getByRole("main").locator("dl").filter({ hasText: "Legal name" });
+    await expect(facts).toContainText("Example Labs, Inc.");
+    await expect(facts).toContainText(ADDRESS_LINES.join(", "));
+    await expect(facts.locator(`a[href="${PHONE_HREF}"]`)).toHaveText(PHONE);
 
     await page.goto("/security");
     await expect(page.getByText("In progress").first()).toBeVisible();

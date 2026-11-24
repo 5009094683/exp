@@ -1,13 +1,16 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { EarlyAccessButton } from "@/components/leads/early-access-button";
 import { CtaBand } from "@/components/marketing/cta-band";
+import { InlineAddress } from "@/components/marketing/inline-address";
 import { Container, Eyebrow, Section, SectionHeading } from "@/components/marketing/layout";
 import { PageHero } from "@/components/marketing/page-hero";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
 import { pageMetadata } from "@/lib/metadata";
+import { telHref } from "@/lib/phone";
 
 export const metadata: Metadata = pageMetadata({
   title: "Company",
@@ -38,6 +41,9 @@ const principles = [
   },
 ];
 
+const factLink =
+  "underline decoration-line-strong underline-offset-4 transition-colors hover:decoration-fg";
+
 function initials(name: string): string {
   return name
     .split(/\s+/)
@@ -49,12 +55,29 @@ function initials(name: string): string {
 
 export default function CompanyPage() {
   const { company, product, proof } = site;
-  const facts: Array<{ label: string; value: string }> = [
-    { label: "Legal name", value: company.legalName },
+  const { phone } = site.contact;
+  const facts: Array<{ label: string; value: ReactNode }> = [
+    // Without a configured legal name this is the trading name, so it is not called one.
+    {
+      label: company.legalName === company.name ? "Company" : "Legal name",
+      value: company.legalName,
+    },
     ...(company.foundedYear ? [{ label: "Founded", value: String(company.foundedYear) }] : []),
     ...(company.registration ? [{ label: "Registration", value: company.registration }] : []),
     ...(company.addressLines.length > 0
-      ? [{ label: "Address", value: company.addressLines.join(", ") }]
+      ? [{ label: "Address", value: <InlineAddress lines={company.addressLines} /> }]
+      : []),
+    ...(phone
+      ? [
+          {
+            label: "Phone",
+            value: (
+              <a href={telHref(phone)} className={factLink}>
+                {phone}
+              </a>
+            ),
+          },
+        ]
       : []),
   ];
 
@@ -217,17 +240,11 @@ export default function CompanyPage() {
               <dt className="text-sm text-fg-subtle">Contact</dt>
               <dd className="text-[15px] text-fg">
                 {site.contact.email ? (
-                  <a
-                    href={`mailto:${site.contact.email}`}
-                    className="underline decoration-line-strong underline-offset-4 transition-colors hover:decoration-fg"
-                  >
+                  <a href={`mailto:${site.contact.email}`} className={factLink}>
                     {site.contact.email}
                   </a>
                 ) : (
-                  <Link
-                    href="/contact"
-                    className="underline decoration-line-strong underline-offset-4 transition-colors hover:decoration-fg"
-                  >
+                  <Link href="/contact" className={factLink}>
                     Contact form
                   </Link>
                 )}

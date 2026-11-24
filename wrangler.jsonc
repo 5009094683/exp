@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "agentos-website",
+  // The Worker in the Cloudflare account that this repository deploys to.
+  "name": "exp",
   "main": "worker/index.ts",
   "compatibility_date": "2026-11-22",
   // Keep variables and secrets added in the Cloudflare dashboard when deploying.

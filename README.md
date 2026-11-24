@@ -200,6 +200,10 @@ To run the Worker locally, build once with `pnpm build:static`, copy `.dev.vars.
 
 ### Things to know
 
+- `name` in `wrangler.jsonc` is the Worker that the repository deploys to. Workers Builds always
+  deploys to the Worker it is connected to, but commands run from your machine use `name`, so keep
+  it equal to that Worker's name. Otherwise a deploy or `wrangler secret put` from your machine
+  goes to a second Worker.
 - `keep_vars` is on, so a deploy does not remove variables you added in the dashboard.
 - The rate limit bindings use `namespace_id` `7301` for production and `7302` for Previews. The
   numbers only have to be unique within your account; change them if you already use them.

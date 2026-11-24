@@ -70,8 +70,8 @@ A value can come from three places. The first one that sets a variable wins:
 site anyway, so it only takes `SITE_*` settings; a unit test fails on anything else. Webhook URLs,
 API keys and the other `LEADS_*` values belong in the host's settings or in `.env.local`.
 
-`.env` currently holds the company's phone number and address. Replace them there if they change,
-or if you reuse this code for another company.
+`.env` currently holds the site's address, the company's phone number and its postal address.
+Replace them there if they change, or if you reuse this code for another company.
 
 Two rules apply throughout:
 
@@ -96,9 +96,10 @@ Two rules apply throughout:
 
 Notes:
 
-- `SITE_URL` is the canonical origin. It is used for canonical links, the sitemap, social previews
-  and the API host shown in the docs. On Vercel it defaults to the project's production domain.
-  Everywhere else, set it; a production build without it prints a warning.
+- `SITE_URL` is the canonical origin. It is used for canonical links, the sitemap, social previews,
+  the API host shown in the docs and the site's name for itself in the legal pages. `.env` sets
+  it. Where it is unset, Vercel falls back to the project's production domain; every other host
+  falls back to `http://localhost:3000` and the production build prints a warning.
 - `SITE_ACCENT_COLOR` takes one hex color. Hover, text and contrast shades are derived from it,
   and the favicon, app icons and social card are generated in the same color.
 - An invalid value fails the build with a message that names the variable.
@@ -209,7 +210,7 @@ To run the Worker locally, build once with `pnpm build:static`, copy `.dev.vars.
   numbers only have to be unique within your account; change them if you already use them.
 - To see the product name instead of the host in notification subjects, also add
   `SITE_PRODUCT_NAME` as a runtime variable.
-- After you attach a custom domain, set `SITE_URL` to it and rebuild.
+- After you attach or change a custom domain, set `SITE_URL` in `.env` to it and redeploy.
 - If Email Address Obfuscation is enabled for your zone, Cloudflare rewrites email addresses in
   the HTML, which appears as hydration warnings in the browser console. Turn it off for this
   hostname.
@@ -244,7 +245,7 @@ exist yet. Keep it that way until those things are real.
 
 | To change                                  | Edit                                                                                                                          |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| Phone number and address                   | `.env`                                                                                                                        |
+| Site address, phone number, postal address | `.env`                                                                                                                        |
 | Names, other contact details, links, color | Environment variables (see [Configuration](#configuration))                                                                   |
 | Capability and audience pages              | `src/content/capabilities.ts`, `src/content/capability-pages.ts`, `src/content/solutions.ts`, `src/content/solution-pages.ts` |
 | Plans, rates and the estimator             | `src/content/pricing.ts` (the demo console's bill uses the same numbers)                                                      |

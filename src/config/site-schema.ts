@@ -133,7 +133,8 @@ const COMPLIANCE_FRAMEWORKS = [
 
 const COMPLIANCE_VALUES = ["planned", "in-progress", "achieved", "hidden"] as const;
 
-const KNOWN_KEYS = new Set<string>([
+/** The name of every setting the site reads. `.env.example` documents each one. */
+export const SITE_SETTING_NAMES: readonly string[] = [
   "SITE_PRODUCT_NAME",
   "SITE_PRODUCT_TAGLINE",
   "SITE_PRODUCT_DESCRIPTION",
@@ -170,7 +171,9 @@ const KNOWN_KEYS = new Set<string>([
   "SITE_NOINDEX",
   "SITE_GOOGLE_SITE_VERIFICATION",
   ...COMPLIANCE_FRAMEWORKS.map((framework) => framework.key),
-]);
+];
+
+const KNOWN_KEYS = new Set(SITE_SETTING_NAMES);
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;

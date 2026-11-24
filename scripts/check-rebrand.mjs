@@ -10,6 +10,7 @@ import { readdirSync, readFileSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import { extname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { isolatedSiteEnv } from "./lib/site-env.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const exportDir = ".rebrand-check";
@@ -19,8 +20,9 @@ const outputPath = join(root, exportDir);
 const forbidden = ["agentos", "agent os"];
 
 /**
- * Only the names change. Every optional setting stays unset, so this build
- * also covers a site deployed with no contact details or social proof.
+ * Only the names change. Every other setting is unset, whatever `.env` holds,
+ * so this build also covers a site deployed with no contact details or social
+ * proof.
  */
 const brand = {
   SITE_PRODUCT_NAME: "Zephyrline",
@@ -64,7 +66,7 @@ console.log(`Building the static target as "${brand.SITE_PRODUCT_NAME}"...`);
 const build = spawnSync(process.execPath, [nextBin, "build"], {
   cwd: root,
   stdio: ["ignore", "ignore", "inherit"],
-  env: { ...process.env, ...brand, BUILD_TARGET: "static", EXPORT_DIR: exportDir },
+  env: { ...isolatedSiteEnv(brand), BUILD_TARGET: "static", EXPORT_DIR: exportDir },
 });
 if (build.status !== 0) {
   console.error("The rebranded build failed.");

@@ -9,7 +9,7 @@ early-access and contact requests, so the site runs on Vercel, on Cloudflare Wor
 static host, with no database and no separate backend.
 
 The product name, the company details and the accent color come from environment variables, so
-the same code can be rebranded without edits.
+the same code can be rebranded without changing any source file.
 
 ## Contents
 
@@ -31,7 +31,7 @@ Requirements: Node.js 22 or later and pnpm 10.
 
 ```bash
 pnpm install
-cp .env.example .env.local   # optional: every variable has a default
+cp .env.example .env.local   # optional: your own overrides; every variable has a default
 pnpm dev
 ```
 
@@ -57,6 +57,21 @@ dialog instead.
 
 All settings are environment variables, and all of them are optional. [`.env.example`](.env.example)
 lists every variable with a description.
+
+A value can come from three places. The first one that sets a variable wins:
+
+| Source                                              | Use it for                                                                      |
+| --------------------------------------------------- | ------------------------------------------------------------------------------- |
+| The host's settings (Vercel, Cloudflare) or a shell | Values that differ per deployment, and everything private                       |
+| `.env.local` (not committed)                        | Your own values during development                                              |
+| [`.env`](.env) (committed)                          | Public details that are the same on every deployment, such as phone and address |
+
+**Never put a secret in `.env`.** The file is committed, and everything in it is published on the
+site anyway, so it only takes `SITE_*` settings; a unit test fails on anything else. Webhook URLs,
+API keys and the other `LEADS_*` values belong in the host's settings or in `.env.local`.
+
+`.env` currently holds the company's phone number and address. Replace them there if they change,
+or if you reuse this code for another company.
 
 Two rules apply throughout:
 
@@ -121,7 +136,7 @@ No configuration file is needed.
 
 1. Import the repository at https://vercel.com/new. The Next.js preset is detected.
 2. Under Settings, Environment Variables, add the `SITE_*` values you want and the `LEADS_*`
-   values for your destination.
+   values for your destination. The values in `.env` apply without being added here.
 3. Deploy. Redeploy after changing a `SITE_*` value.
 
 Preview deployments allow the Vercel toolbar in the content security policy; production does not.
@@ -139,7 +154,8 @@ variables and secrets**. They are set in different places.
 1. In the Cloudflare dashboard, go to Workers & Pages, create a Worker and import the repository.
 2. Set the build command to `pnpm build`. Leave the deploy command as `npx wrangler deploy`.
    The build detects Workers Builds and selects the static target.
-3. Under Settings, Build, add the `SITE_*` values as build variables.
+3. Under Settings, Build, add the `SITE_*` values as build variables. The values in `.env` apply
+   without being added here.
 4. Under Settings, Variables and Secrets, add the `LEADS_*` values.
 
 `.nvmrc` and the `packageManager` field select the Node.js and pnpm versions for the build.
@@ -197,19 +213,20 @@ exist yet. Keep it that way until those things are real.
 
 ## Where to change things
 
-| To change                                   | Edit                                                                                                                          |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Names, contact details, links, accent color | Environment variables                                                                                                         |
-| Capability and audience pages               | `src/content/capabilities.ts`, `src/content/capability-pages.ts`, `src/content/solutions.ts`, `src/content/solution-pages.ts` |
-| Plans, rates and the estimator              | `src/content/pricing.ts` (the demo console's bill uses the same numbers)                                                      |
-| Documentation                               | `src/content/docs/nav.ts`, `src/content/docs/pages.ts`                                                                        |
-| Legal pages                                 | `src/content/legal.ts`                                                                                                        |
-| Code samples shown across the site          | `src/content/samples.ts`                                                                                                      |
-| Demo console data                           | `src/demo/`                                                                                                                   |
-| Form fields and validation                  | `src/lib/leads/schema.ts`                                                                                                     |
-| Wording of the gated actions                | `src/components/leads/gates.ts`                                                                                               |
-| Security headers                            | `src/config/headers.ts`, then `UPDATE_HEADERS=1 pnpm test`                                                                    |
-| Colors, type and motion                     | `src/app/globals.css`                                                                                                         |
+| To change                                  | Edit                                                                                                                          |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| Phone number and address                   | `.env`                                                                                                                        |
+| Names, other contact details, links, color | Environment variables (see [Configuration](#configuration))                                                                   |
+| Capability and audience pages              | `src/content/capabilities.ts`, `src/content/capability-pages.ts`, `src/content/solutions.ts`, `src/content/solution-pages.ts` |
+| Plans, rates and the estimator             | `src/content/pricing.ts` (the demo console's bill uses the same numbers)                                                      |
+| Documentation                              | `src/content/docs/nav.ts`, `src/content/docs/pages.ts`                                                                        |
+| Legal pages                                | `src/content/legal.ts`                                                                                                        |
+| Code samples shown across the site         | `src/content/samples.ts`                                                                                                      |
+| Demo console data                          | `src/demo/`                                                                                                                   |
+| Form fields and validation                 | `src/lib/leads/schema.ts`                                                                                                     |
+| Wording of the gated actions               | `src/components/leads/gates.ts`                                                                                               |
+| Security headers                           | `src/config/headers.ts`, then `UPDATE_HEADERS=1 pnpm test`                                                                    |
+| Colors, type and motion                    | `src/app/globals.css`                                                                                                         |
 
 ## Scripts and tests
 
@@ -227,6 +244,9 @@ exist yet. Keep it that way until those things are real.
 The browser tests need Chromium once: `pnpm exec playwright install chromium`. They run at a
 desktop and a mobile viewport, visit every page, check for console errors and broken links, and
 submit the forms against a local webhook receiver. CI runs everything above on each pull request.
+
+The browser tests and the rebrand check build with settings of their own, so their results do not
+depend on what `.env` or `.env.local` contain.
 
 ## How it is built
 

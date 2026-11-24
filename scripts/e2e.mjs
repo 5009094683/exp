@@ -12,6 +12,7 @@
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { isolatedSiteEnv } from "./lib/site-env.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
@@ -25,7 +26,8 @@ const playwrightArgs = rest[0] === "--" ? rest.slice(1) : rest;
 
 /**
  * Every optional setting is filled in so the tests exercise the UI that only
- * appears when a value is present. The values are fictional.
+ * appears when a value is present. The values are fictional, and they are the
+ * only site settings the build sees: `.env` and `.env.local` do not apply.
  */
 const siteEnv = {
   SITE_URL: "https://www.example.com",
@@ -73,7 +75,7 @@ function run(command, args, env) {
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
-const env = { ...process.env, ...siteEnv, BUILD_TARGET: target, E2E_TARGET: target };
+const env = { ...isolatedSiteEnv(siteEnv), BUILD_TARGET: target, E2E_TARGET: target };
 
 if (!process.env.E2E_SKIP_BUILD) {
   run(process.execPath, [require.resolve("next/dist/bin/next"), "build"], env);

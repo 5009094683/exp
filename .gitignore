@@ -35,8 +35,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
+# env files: `.env` holds public site details and is committed; the rest stay local
 .env*
+!.env
 !.env.example
 
 # vercel

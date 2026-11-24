@@ -152,13 +152,38 @@ variables and secrets**. They are set in different places.
 ### From Git, with Workers Builds
 
 1. In the Cloudflare dashboard, go to Workers & Pages, create a Worker and import the repository.
-2. Set the build command to `pnpm build`. Leave the deploy command as `npx wrangler deploy`.
-   The build detects Workers Builds and selects the static target.
+2. Set the build command to `pnpm build`. Leave the deploy command as `npx wrangler deploy` and
+   the preview command as `npx wrangler preview`. The build detects Workers Builds and selects
+   the static target.
 3. Under Settings, Build, add the `SITE_*` values as build variables. The values in `.env` apply
    without being added here.
 4. Under Settings, Variables and Secrets, add the `LEADS_*` values.
 
 `.nvmrc` and the `packageManager` field select the Node.js and pnpm versions for the build.
+
+### Previews of other branches
+
+Workers Builds also builds every branch other than the production branch and deploys it as a
+[Preview](https://developers.cloudflare.com/workers/previews/): a separate copy of the site at
+its own address, which Cloudflare posts on the pull request. The production site does not change
+until the branch is merged. A Preview is public: anyone who has its address can open it.
+
+A Preview takes its settings from the `previews` block in `wrangler.jsonc` and inherits almost
+nothing from production:
+
+- **The block is required.** Without it `wrangler preview` stops with an error and the build of
+  the branch fails.
+- **Bindings are declared again.** The rate limit appears in the block under a `namespace_id` of
+  its own, so requests to a Preview do not count against production's limit.
+- **Production's variables and secrets do not apply.** A Preview therefore has no destination
+  for requests: its forms work, and each request is only written to that Preview's logs, so
+  testing a Preview does not notify anyone. To have Previews deliver requests, give them their
+  own values, for example with
+  `pnpm exec wrangler preview base-config secret put LEADS_WEBHOOK_URL`. A value added this way
+  applies to Previews created afterwards.
+
+Assets, the compatibility date and the observability settings come from the top level of the
+file and are the same for production and Previews.
 
 ### From your machine
 
@@ -176,8 +201,8 @@ To run the Worker locally, build once with `pnpm build:static`, copy `.dev.vars.
 ### Things to know
 
 - `keep_vars` is on, so a deploy does not remove variables you added in the dashboard.
-- The rate limit binding uses `namespace_id` `7301`. The number only has to be unique within your
-  account; change it if you already use it.
+- The rate limit bindings use `namespace_id` `7301` for production and `7302` for Previews. The
+  numbers only have to be unique within your account; change them if you already use them.
 - To see the product name instead of the host in notification subjects, also add
   `SITE_PRODUCT_NAME` as a runtime variable.
 - After you attach a custom domain, set `SITE_URL` to it and rebuild.

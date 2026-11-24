@@ -28,4 +28,16 @@
     "logs": { "enabled": true, "head_sampling_rate": 1 },
     "traces": { "enabled": true, "head_sampling_rate": 1 },
   },
+  // Settings for Previews, the copies of the site that `wrangler preview` creates for other
+  // branches and pull requests. The block is required, and bindings are not inherited from above.
+  "previews": {
+    "ratelimits": [
+      {
+        "name": "LEADS_RATE_LIMITER",
+        // A different number from production, so testing a Preview cannot use up its allowance.
+        "namespace_id": "7302",
+        "simple": { "limit": 30, "period": 60 },
+      },
+    ],
+  },
 }
